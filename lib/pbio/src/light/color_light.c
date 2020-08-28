@@ -60,30 +60,6 @@ pbio_error_t pbio_color_light_on_hsv(pbio_color_light_t *light, const pbio_color
 }
 
 /**
- * Turns the light on with specified color.
- *
- * Some lights may not be capable of displaying all colors.
- *
- * ::PBIO_COLOR_BLACK or ::PBIO_COLOR_NONE will turn the light off instead of on.
- *
- * Colors like ::PBIO_COLOR_BROWN and ::PBIO_COLOR_GRAY are not possible since
- * lights emit light rather than reflect it and will appear as dim orange and
- * dim white instead.
- *
- * If an animation is running in the background, it will be stopped.
- *
- * @param [in]  light       The light instance
- * @param [in]  color       The color
- * @return                  ::PBIO_SUCCESS if the call was successful,
- *                          ::PBIO_ERROR_NO_DEV if the light is not connected
- */
-pbio_error_t pbio_color_light_on(pbio_color_light_t *light, pbio_color_t color) {
-    pbio_color_hsv_t hsv;
-    pbio_color_to_hsv(color, &hsv);
-    return pbio_color_light_on_hsv(light, &hsv);
-}
-
-/**
  * Turns the light off.
  *
  * If an animation is running in the background, it will be stopped.

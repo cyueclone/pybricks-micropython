@@ -182,7 +182,9 @@ void pbsys_status_light_handle_event(process_event_t event, process_data_t data)
         pbsys_status_light_handle_status_change();
     }
     if (event == PBIO_EVENT_STATUS_SET && (pbsys_status_t)data == PBSYS_STATUS_USER_PROGRAM_RUNNING) {
-        pbio_color_light_on(pbsys_status_light, PBIO_COLOR_GREEN);
+        // FIXME: Share a handful of sys colors throughout pbio
+        pbio_color_hsv_t green = {120, 100, 100};
+        pbio_color_light_on_hsv(pbsys_status_light, &green);
     }
 }
 

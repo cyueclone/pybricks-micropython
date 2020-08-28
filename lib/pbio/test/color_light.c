@@ -52,8 +52,9 @@ PT_THREAD(test_color_light(struct pt *pt)) {
     static pbio_color_light_t test_light;
     pbio_color_light_init(&test_light, &test_light_funcs);
 
-    // light on should trigger the callback with 100% brightness
-    pbio_color_light_on(&test_light, PBIO_COLOR_GREEN);
+    // light on hsv should trigger the callback with 100% brightness
+    pbio_color_hsv_t green = {GREEN_HUE, 100, 100};
+    pbio_color_light_on_hsv(&test_light, &green);
     tt_want_uint_op(test_light_set_hsv_last_hue, ==, GREEN_HUE);
     tt_want_uint_op(test_light_set_hsv_last_brightness, ==, 100);
 
