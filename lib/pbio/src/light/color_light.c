@@ -101,17 +101,20 @@ pbio_error_t pbio_color_light_off(pbio_color_light_t *light) {
 static clock_time_t pbio_color_light_blink_next(pbio_light_animation_t *animation) {
     pbio_color_light_t *light = PBIO_CONTAINER_OF(animation, pbio_color_light_t, animation);
 
-    const pbio_color_light_blink_cell_t *cells = light->cells;
-    const pbio_color_light_blink_cell_t *cell = &cells[light->current_cell++];
+    const pbio_color_t *cells = light->cells;
+    const pbio_color_t *cell = &cells[light->current_cell++];
 
     // if we have reached the array terminator, start back at the beginning
-    if (cell->duration == 0) {
+    if (*cell == PBIO_COLOR_END) {
         cell = &cells[0];
         light->current_cell = 1;
     }
 
-    light->funcs->set_hsv(light, &cell->hsv);
-    return clock_from_msec(cell->duration);
+    pbio_color_hsv_t hsv;
+    pbio_color_to_hsv(*cell, &hsv);
+
+    light->funcs->set_hsv(light, &hsv);
+    return clock_from_msec(PBIO_COLOR_GET_DURATION(*cell));
 }
 
 /**
@@ -124,9 +127,9 @@ static clock_time_t pbio_color_light_blink_next(pbio_light_animation_t *animatio
  * replaced with this one.
  *
  * @param [in]  light       The light instance
- * @param [in]  cells       Array of up to 65536 blink animation cells ending with ::PBIO_COLOR_LIGHT_BLINK_END
+ * @param [in]  cells       Array of up to 65536 blink animation cells ending with ::PBIO_COLOR_END
  */
-void pbio_color_light_start_blink_animation(pbio_color_light_t *light, const pbio_color_light_blink_cell_t *cells) {
+void pbio_color_light_start_blink_animation(pbio_color_light_t *light, const pbio_color_t *cells) {
     pbio_color_light_stop_animation(light);
     pbio_light_animation_init(&light->animation, pbio_color_light_blink_next);
     light->cells = cells;

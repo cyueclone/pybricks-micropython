@@ -46,8 +46,8 @@
  */
 typedef enum {
     // NONE uses different hue to differintiate if from black
-    PBIO_COLOR_NONE = PBIO_COLOR_ENCODE(180, 0, 0, 0), /**< no color */
-    PBIO_COLOR_BLACK = PBIO_COLOR_ENCODE(0, 0, 0, 0), /**< black */
+    PBIO_COLOR_NONE = PBIO_COLOR_ENCODE(0, 0, 0, 0), /**< no color */
+    PBIO_COLOR_BLACK = PBIO_COLOR_ENCODE(0, 0, 0, 10), /**< black */
     PBIO_COLOR_GRAY = PBIO_COLOR_ENCODE(0, 0, 50, 0), /**< gray */
     PBIO_COLOR_WHITE = PBIO_COLOR_ENCODE(0, 0, 100, 0), /**< white */
     PBIO_COLOR_RED = PBIO_COLOR_ENCODE(0, 100, 100, 0), /**< red */
@@ -59,9 +59,8 @@ typedef enum {
     PBIO_COLOR_BLUE = PBIO_COLOR_ENCODE(240, 100, 100, 0), /**< blue */
     PBIO_COLOR_VIOLET = PBIO_COLOR_ENCODE(270, 100, 100, 0), /**< violet */
     PBIO_COLOR_MAGENTA = PBIO_COLOR_ENCODE(300, 100, 100, 0), /**< magenta */
+    PBIO_COLOR_END = PBIO_COLOR_ENCODE(511, 0, 0, 0), /**< end of a pattern */
 } pbio_color_t;
-
-#undef PBIO_COLOR_ENCODE
 
 /** 24-bit RGB color. */
 typedef struct {

@@ -23,10 +23,10 @@ static uint8_t test_light_set_hsv_call_count;
 static uint16_t test_light_set_hsv_last_hue;
 static uint16_t test_light_set_hsv_last_brightness;
 
-static const pbio_color_light_blink_cell_t test_blink[] = {
-    PBIO_COLOR_LIGHT_BLINK_CELL(BLUE_HUE, 100, 100, TEST_ANIMATION_TIME),
-    PBIO_COLOR_LIGHT_BLINK_CELL(GREEN_HUE, 100, 100, TEST_ANIMATION_TIME),
-    PBIO_COLOR_LIGHT_BLINK_END
+static const pbio_color_t test_blink[] = {
+    PBIO_COLOR_ENCODE(BLUE_HUE, 100, 100, TEST_ANIMATION_TIME),
+    PBIO_COLOR_ENCODE(GREEN_HUE, 100, 100, TEST_ANIMATION_TIME),
+    PBIO_COLOR_END
 };
 
 static const pbio_color_hsv_t test_animation[] = {
