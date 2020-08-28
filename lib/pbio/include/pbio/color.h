@@ -16,15 +16,28 @@
 /** @cond INTERNAL */
 
 /**
- * Squeezes HSV into 8 bits.
- *
- * This gets us 12 hues, 2 saturations and 3 values
- *
- * @param h [in]    The hue, 0..359 degrees in increments of 30
- * @param s [in]    The saturation, 0 or 100 percent
- * @param v [in]    The value, 0, 50, or 100 percent
+ * Packs HSV and duration into 32 bits pbio_color_t
+ * 
+ * @param [in]  hue         The hue (0 to 359)
+ * @param [in]  saturation  The saturation (0 to 100)
+ * @param [in]  value       The brightness (0 to 100)
+ * @param [in]  duration    The duration in milliseconds (0--4096 ms, truncates to 4ms steps)
  */
-#define PBIO_COLOR_ENCODE(h, s, v) (((h / 30) << 3) | ((s / 51) << 2) | (v / 34))
+#define PBIO_COLOR_ENCODE(hue, saturation, value, duration) \
+    ( \
+        ((hue)               & 0x01FF) << 0  | \
+        (((saturation) >> 1) & 0x3F)   << 9  | \
+        ((value)             & 0x7F)   << 15 | \
+        (((duration) >> 2)   & 0x3FF)  << 22   \
+    )
+
+/**
+ * Gets duration from pbio_color_t
+ * 
+ * @param [in]  color       Encoded using PBIO_COLOR_ENCODE
+ * @param [in]  duration    The duration in milliseconds (0--4096 ms, truncates to 4ms steps)
+ */
+#define PBIO_COLOR_GET_DURATION(color) (((color) >> 22) << 2)
 
 /** @endcond */
 
@@ -33,19 +46,19 @@
  */
 typedef enum {
     // NONE uses different hue to differintiate if from black
-    PBIO_COLOR_NONE = PBIO_COLOR_ENCODE(180, 0, 0), /**< no color */
-    PBIO_COLOR_BLACK = PBIO_COLOR_ENCODE(0, 0, 0), /**< black */
-    PBIO_COLOR_GRAY = PBIO_COLOR_ENCODE(0, 0, 50), /**< gray */
-    PBIO_COLOR_WHITE = PBIO_COLOR_ENCODE(0, 0, 100), /**< white */
-    PBIO_COLOR_RED = PBIO_COLOR_ENCODE(0, 100, 100), /**< red */
-    PBIO_COLOR_BROWN = PBIO_COLOR_ENCODE(30, 100, 50), /**< brown */
-    PBIO_COLOR_ORANGE = PBIO_COLOR_ENCODE(30, 100, 100), /**< orange */
-    PBIO_COLOR_YELLOW = PBIO_COLOR_ENCODE(60, 100, 100), /**< yellow */
-    PBIO_COLOR_GREEN = PBIO_COLOR_ENCODE(120, 100, 100), /**< green */
-    PBIO_COLOR_CYAN = PBIO_COLOR_ENCODE(180, 100, 100), /**< cyan */
-    PBIO_COLOR_BLUE = PBIO_COLOR_ENCODE(240, 100, 100), /**< blue */
-    PBIO_COLOR_VIOLET = PBIO_COLOR_ENCODE(270, 100, 100), /**< violet */
-    PBIO_COLOR_MAGENTA = PBIO_COLOR_ENCODE(300, 100, 100), /**< magenta */
+    PBIO_COLOR_NONE = PBIO_COLOR_ENCODE(180, 0, 0, 0), /**< no color */
+    PBIO_COLOR_BLACK = PBIO_COLOR_ENCODE(0, 0, 0, 0), /**< black */
+    PBIO_COLOR_GRAY = PBIO_COLOR_ENCODE(0, 0, 50, 0), /**< gray */
+    PBIO_COLOR_WHITE = PBIO_COLOR_ENCODE(0, 0, 100, 0), /**< white */
+    PBIO_COLOR_RED = PBIO_COLOR_ENCODE(0, 100, 100, 0), /**< red */
+    PBIO_COLOR_BROWN = PBIO_COLOR_ENCODE(30, 100, 50, 0), /**< brown */
+    PBIO_COLOR_ORANGE = PBIO_COLOR_ENCODE(30, 100, 100, 0), /**< orange */
+    PBIO_COLOR_YELLOW = PBIO_COLOR_ENCODE(60, 100, 100, 0), /**< yellow */
+    PBIO_COLOR_GREEN = PBIO_COLOR_ENCODE(120, 100, 100, 0), /**< green */
+    PBIO_COLOR_CYAN = PBIO_COLOR_ENCODE(180, 100, 100, 0), /**< cyan */
+    PBIO_COLOR_BLUE = PBIO_COLOR_ENCODE(240, 100, 100, 0), /**< blue */
+    PBIO_COLOR_VIOLET = PBIO_COLOR_ENCODE(270, 100, 100, 0), /**< violet */
+    PBIO_COLOR_MAGENTA = PBIO_COLOR_ENCODE(300, 100, 100, 0), /**< magenta */
 } pbio_color_t;
 
 #undef PBIO_COLOR_ENCODE

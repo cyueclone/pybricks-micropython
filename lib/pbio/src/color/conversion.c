@@ -191,9 +191,9 @@ void pbio_color_hsv_to_rgb(const pbio_color_hsv_t *hsv, pbio_color_rgb_t *rgb) {
  */
 void pbio_color_to_hsv(pbio_color_t color, pbio_color_hsv_t *hsv) {
     // See PBIO_COLOR_ENCODE in color.h for encoding scheme
-    hsv->h = (color >> 3) * 30;
-    hsv->s = (color & (0x1 << 2)) ? 100 : 0;
-    hsv->v = (color & 0x2) ? 100 : ((color & 0x1) ? 50 : 0);
+    hsv->h = color & 0x01FF;
+    hsv->s = (color & 0x7E00) >> 8;
+    hsv->v = (color & 0x7F8000) >> 16;
 }
 
 /**
